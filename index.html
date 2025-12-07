@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大豬2025年末有獎徵答！</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 設定字體為 Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* 慶祝背景圖案 (使用使用者提供的圖片) */
+        /* 【路徑修正：使用正確的 assets-gift 資料夾路徑】 */
+        .celebration-bg {
+            background-image: url('./assets-gift/birthday_background.jpg'); 
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #BEE3F8;
+        }
+
+        /* 自定義動畫：略 */
+        @keyframes jiggle {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.05) rotate(2deg); }
+            75% { transform: scale(1.05) rotate(-2deg); }
+        }
+
+        @keyframes openAndGlow {
+            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 40px rgba(255, 255, 0, 0.8); }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        @keyframes explosion {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(2) rotate(30deg); opacity: 0; } 
+        }
+
+        @keyframes strongGlow {
+            0% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+            50% { box-shadow: 0 0 80px 30px rgba(255, 255, 100, 1); }
+            100% { box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typewriter-text {
+            border-right: .15em solid #FCD34D;
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
+
+        .hidden-item {
+            display: none;
+        }
+
+        .gift-media {
+            max-width: 90%;
+            height: auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 1rem;
+        }
+        video.gift-media {
+            width: 100%;
+            max-height: 50vh;
+            object-fit: cover;
+        }
+
+        .piggy-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .piggy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: flex-start; /* 讓多行文字也能對齊 */
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.75rem;
+            background-color: #FFFBEB;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .quiz-option:hover {
+            background-color: #FCD34D;
+        }
+        .quiz-option input[type="radio"],
+        .quiz-option input[type="checkbox"] {
+            margin-right: 1rem;
+            margin-top: 0.25rem; /* 讓 Checkbox/Radio 稍微下移 */
+            flex-shrink: 0; /* 防止縮小 */
+            transform: scale(1.5);
+            accent-color: #F59E0B;
+        }
+        .text-cute-shadow {
+             text-shadow: 2px 2px 0px #FCD34D;
+             color: #D97706;
+        }
+        /* 新增：問答錯誤回饋的樣式 */
+        .feedback-message {
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background-color: #FEE2E2; /* Red 100 */
+            color: #B91C1C; /* Red 700 */
+            border: 2px solid #F87171; /* Red 400 */
+            border-radius: 0.75rem;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 輪播圖樣式 */
+        .slideshow-img {
+            max-height: 40vh;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: opacity 1s ease-in-out, transform 0.5s ease-in-out;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .slideshow-img.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 celebration-bg">
+    
+    <!-- 1. 背景音樂播放器 (隱藏) -->
+    <!-- 根據使用者需求，使用上傳的音樂檔案並設定 loop -->
+    <audio id="background-music" loop>
+        <!-- 使用上傳的 music.mp3 檔案 -->
+        <source src="http://googleusercontent.com/file_content/1" type="audio/mpeg">
+        你的瀏覽器不支援音訊播放。
+    </audio>
+
+    <!-- 主遊戲容器 -->
+    <div id="game-container" class="w-full max-w-lg bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-2xl text-center min-h-[500px] flex flex-col justify-center items-center" 
+         style="background-color: rgba(255, 255, 255, 0.98); border: 4px solid #FCD34D;">
+        
+        <!-- 內容顯示區域 -->
+        <div id="content-display" class="flex flex-col items-center justify-center w-full h-full space-y-6">
+            <!-- 遊戲內容/問答/禮物會顯示在這裡 -->
+        </div>
+
+        <!-- 禮物盒元素 (用於動畫和點擊) -->
+        <!-- 【路徑修正：使用正確的 assets-gift 資料夾路徑】 -->
+        <img id="gift-box-visual" 
+             src="./assets-gift/gift1.jpg" 
+             alt="生日禮物盒" 
+             class="cursor-pointer w-48 h-48 md:w-64 md:h-64 object-contain transition-all duration-300 hidden-item" 
+             onclick="handleGiftClick()">
+
+        <!-- 動作按鈕 -->
+        <div id="action-area" class="mt-8">
+            <!-- 按鈕區 -->
+        </div>
+
+        <!-- 錯誤訊息/加載指示 (此處主要用於臨時狀態顯示) -->
+        <p id="message" class="mt-4 text-red-500 font-semibold"></p>
+        <div id="loading-spinner" class="hidden-item">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+            <p class="text-amber-600 mt-2">小豬正在準備特別禮物...</p>
+        </div>
+
+    </div>
+
+    <script>
+        // === 遊戲狀態定義 ===
+        let gameState = 0;
+        let currentGiftIndex = 0;
+        let slideshowIndex = 0;
+        let slideshowInterval = null; // 用於儲存輪播計時器
+
+        // --- 狀態碼定義 ---
+        const STATE = {
+            INTRO: 0,
+            QUIZ_START: 1, // Q1
+            QUIZ_END: 10,  // Q10
+            CONFIRM_Q9: 11, // Q9 失敗確認畫面 (你真的不愛小豬嗎?)
+            CONFIRM_Q10: 12, // Q10 失敗確認畫面 (所以你不愛小豬嗎?)
+            CONGRATS: 13, // 恭喜畫面
+            GIFT_PREP: 14, // 禮物盒等待點擊
+            GIFT_REVEAL_START: 15, // 禮物 1
+            GIFT_EXPLOSION: 20, // 爆炸禮物
+            GIFT_FINAL: 21, // 最終大獎
+            CARD: 22, // 最終卡片
+            PHOTO_SLIDESHOW: 23 // 新增：合照輪播
+        };
+        
+        const contentDisplay = document.getElementById('content-display');
+        const giftBoxVisual = document.getElementById('gift-box-visual');
+        const actionArea = document.getElementById('action-area');
+        const message = document.getElementById('message');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const backgroundMusic = document.getElementById('background-music');
+
+        let musicPlayed = false; // 新增：追蹤是否已嘗試播放音樂並顯示提示
+
+        // 定義問答題目 (State 1 到 State 10)
+        // ... (問題定義保持不變，略) ...
+        const questions = [
+            // Q1: State 1 (Index 0)
+            { 
+                state: 1, 
+                title: "請問你是?", 
+                type: 'single',
+                options: [
+                    { text: "小豬專屬秘書 大豬", isCorrect: true },
+                    { text: "蔡吳恐龍", isCorrect: false, feedback: '再想想看，你是誰？' },
+                    { text: "超級大帥哥", isCorrect: false, feedback: '雖然你是，但有更重要的身份！' },
+                ],
+                successState: 2
+            },
+            // Q2: State 2 (Index 1)
+            { 
+                state: 2, 
+                title: "小豬是誰", 
+                type: 'single',
+                options: [
+                    { text: "胖胖圓圓小豬", isCorrect: false, feedback: '你才圓圓胖胖!!!' },
+                    { text: "最可愛漂亮的女朋朋豬豬會社總裁", isCorrect: true },
+                    { text: "我不認識小豬，他誰?", isCorrect: false, feedback: '我再給你一次台階下' },
+                ],
+                successState: 3
+            },
+            // Q3: State 3 (Index 2)
+            { 
+                state: 3, 
+                title: "小豬最害怕甚麼", 
+                type: 'single',
+                options: [
+                    { text: "蟑螂", isCorrect: false, feedback: '雖然真的超怕' },
+                    { text: "變好胖胖胖胖胖胖", isCorrect: false, feedback: '雖然超害怕' },
+                    { text: "大豬不愛小豬了", isCorrect: true },
+                ],
+                successState: 4
+            },
+            // Q4: State 4 (Index 3)
+            { 
+                state: 4, 
+                title: "小豬痛痛 不舒服的時候該怎麼辦", 
+                type: 'single',
+                options: [
+                    { text: "簡單說幫你呼呼乖乖後繼續做自己的事", isCorrect: false, feedback: '太敷衍了根本沒有用啦' },
+                    { text: "摸摸小豬的頭 抱著陪在小豬身邊 照顧她", isCorrect: true },
+                    { text: "小豬很堅強他自己可以撐過去不用我在", isCorrect: false, feedback: '那小豬就不需要你了拉' },
+                ],
+                successState: 5
+            },
+            // Q5: State 5 (Index 4)
+            { 
+                state: 5, 
+                title: "小豬生氣的時候怎麼辦", 
+                type: 'single',
+                options: [
+                    { text: "繼續惹小豬生氣 自己大笑哈哈哈哈哈", isCorrect: false, feedback: '小豬怒火中燒' },
+                    { text: "不理小豬等她氣消再說", isCorrect: false, feedback: '那小豬永遠不理你了' },
+                    { text: "如果自己做錯道歉記住不要再犯 哄哄小豬讓他開心", isCorrect: true },
+                ],
+                successState: 6
+            },
+            // Q6: State 6 (Index 5)
+            { 
+                state: 6, 
+                title: "小豬甚麼時候最開心", 
+                type: 'single',
+                options: [
+                    { text: "吃到好吃東西的時候", isCorrect: false, feedback: '雖然也是很開心' },
+                    { text: "見到大豬的時候", isCorrect: true },
+                    { text: "嚕到貓咪的時候", isCorrect: false, feedback: '雖然也是超開心' },
+                ],
+                successState: 7
+            },
+            // Q7: State 7 (Index 6) - 複選題
+            { 
+                state: 7, 
+                title: "小豬最想要甚麼禮物(複選題)", 
+                type: 'multi',
+                options: [
+                    { text: "大豬親手做卡片", isCorrect: true },
+                    { text: "漂亮花花", isCorrect: true },
+                    { text: "項鍊", isCorrect: true },
+                    { text: "對小豬說感人感性的話", isCorrect: true },
+                    { text: "溫柔的對小豬 抱抱小豬 帶小豬出去玩", isCorrect: true },
+                    { text: "一直陪在小豬身邊不讓她孤單難過", isCorrect: true },
+                    { text: "逗小豬開心", isCorrect: true },
+                ],
+                successState: 8,
+                failureFeedback: '好像還有其他東西?'
+            },
+            // Q8: State 8 (Index 7) - 複選題
+            { 
+                state: 8, 
+                title: "小豬最討厭甚麼(複選題)", 
+                type: 'multi',
+                options: [
+                    { text: "說謊欺騙", isCorrect: true },
+                    { text: "繼續惹小豬生氣", isCorrect: true },
+                    { text: "不理小豬 忽視小豬 跟朋友出去忘記小豬", isCorrect: true },
+                    { text: "忘記說過的承諾", isCorrect: true },
+                    { text: "重複犯以前犯過的錯", isCorrect: true },
+                    { text: "對小豬不耐煩 沒耐性", isCorrect: true },
+                    { text: "兇小豬", isCorrect: true },
+                ],
+                successState: 9,
+                failureFeedback: '你確定只有這些?'
+            },
+            // Q9: State 9 (Index 8) - Branching Q (原 Q2)
+            { 
+                state: 9, 
+                title: "你最愛的人是?", 
+                type: 'branching',
+                options: [
+                    { text: "小豬總裁", isCorrect: true }, // Success -> State 10
+                    { text: "IU", isCorrect: false, feedback: '你確定嗎' }, // Incorrect, stay on Q9
+                    { text: "我沒有最愛的人 我沒有愛小豬", isCorrect: false, failureState: STATE.CONFIRM_Q9 }, // Branch to Confirmation Screen (State 11)
+                ],
+                successState: 10
+            },
+            // Q10: State 10 (Index 9) - Branching Q (原 Q3)
+            { 
+                state: 10, 
+                title: "你願意對小豬好，忠誠不欺騙不隱瞞，真心的愛小豬嗎", 
+                type: 'branching',
+                options: [
+                    { text: "我願意", isCorrect: true }, // Success -> State 13 (GongXi)
+                    { text: "我不願意", isCorrect: false, failureState: STATE.CONFIRM_Q10 }, // Branch to Confirmation Screen (State 12)
+                ],
+                successState: STATE.CONGRATS // 成功跳到恭喜畫面
+            }
+        ];
+
+        // 禮物序列 (對應狀態 15 到 21)
+        // 【路徑修正：使用正確的 assets-gift 資料夾路徑】
+        const giftSequence = [
+            { id: 1, img: "./assets-gift/placeholder_pig.jpg", title: "恭喜你獲得!", text: "終身ㄅㄧㄤˋㄅㄧㄤˋ豬豬獎(超ㄅㄧㄤˋ!)", nextBtnText: "打開下一個禮物盒", nextState: STATE.GIFT_PREP },
+            { id: 2, img: "./assets-gift/gift2.jpg", title: "恭喜你獲得!", text: "生日蛋糕兌換卷(口味任選)", nextBtnText: "打開下一個禮物盒", nextState: STATE.GIFT_PREP },
+            { id: 3, img: "./assets-gift/gift3.jpg", title: "恭喜你獲得!", text: "保暖套裝 (記得告訴小豬你喜歡的顏色喔)", nextBtnText: "打開下一個禮物盒", nextState: STATE.GIFT_PREP },
+            { id: 4, img: "./assets-gift/gift4.jpg", title: "恭喜你獲得!", text: "可愛女友出道照一張(實體簽名照)", nextBtnText: "打開下一個禮物盒", nextState: STATE.GIFT_PREP },
+            { id: 5, img: "./assets-gift/my_birthday_video.mp4", title: "恭喜你獲得!", text: "小豬唱給你聽", nextBtnText: "打開下一個禮物盒", nextState: STATE.GIFT_PREP },
+            { id: 6, img: "./assets-gift/placeholder_explosion.jpg", title: "💥 禮物爆炸! 💥", text: "銘謝惠顧哈哈，再開一次", nextBtnText: "再開一次！", isExplosion: true },
+            { id: 7, img: "./assets-gift/gift5.jpg", title: "這是….!!!!!!!!!", text: "恭喜你獲得最大獎: DJI pocket3一套\n\n你帶小豬瑞士行，小豬幫你全部記錄起來", nextBtnText: "你喜歡這些禮物嗎?", nextState: STATE.CARD },
+        ];
+
+        // 卡片內容 (不變)
+        const cardText = `給大豬:
+
+有沒有喜歡我的驚喜呀，這是我幫你慶祝的第二個生日，時間過得好快，雖然又是不能陪在你身邊的一年，但還是希望能讓你感覺開心。你幫我出機票我買相機給你，要記錄我們一起去好多好多地方玩，要去環遊全世界!
+謝謝你在我需要的時候陪在我身邊，給我建議聽我發洩，雖然有時候磨合、想法可能不一樣，但我們要越來越好啦，希望我們能成為彼此互補最佳拍檔
+26歲了生日快樂要更愛小豬、對小豬更好喔，我愛你 💞`;
+
+        // 輪播照片清單
+        // 請將以下 URL 替換成您實際的照片路徑！
+        const slideshowPhotos = [
+            "https://placehold.co/600x400/FFD1DC/663399?text=照片1+可愛合照",
+            "https://placehold.co/600x400/99CCFF/333366?text=照片2+旅行回憶",
+            "https://placehold.co/600x400/CCFFCC/336633?text=照片3+美食時光",
+            "https://placehold.co/600x400/FF9999/660000?text=照片4+最愛大豬",
+        ];
+
+        // === 輔助函數 (音樂控制已更新) ===
+
+        /**
+         * 停止背景音樂
+         */
+        function stopMusic() {
+            if (backgroundMusic) {
+                backgroundMusic.pause();
+                backgroundMusic.currentTime = 0;
+            }
+        }
+        
+        /**
+         * 嘗試播放背景音樂
+         */
+        function playMusic() {
+            if (backgroundMusic && backgroundMusic.paused) {
+                backgroundMusic.play().catch(error => {
+                    if (!musicPlayed) {
+                        // 如果自動播放失敗，顯示一次提示
+                        message.textContent = '🔊 請點擊這裡或畫面任意處以播放背景音樂！';
+                        message.classList.remove('text-red-500', 'font-semibold');
+                        message.classList.add('text-amber-600', 'font-bold', 'cursor-pointer');
+                        message.onclick = () => {
+                            backgroundMusic.play();
+                            message.textContent = '🎶 背景音樂已啟動！';
+                            message.classList.remove('cursor-pointer');
+                            message.onclick = null;
+                        };
+                        musicPlayed = true; // 標記已提示
+                    }
+                });
+            }
+        }
+        
+        /**
+         * 顯示內容卡片 (通用於介紹、禮物內容、確認畫面)
+         */
+        function showContentCard(title, bodyHtml, mediaUrl = null, stateClass = 'bg-amber-50/80') {
+            // 在切換狀態時，停止輪播 (但**不**停止音樂，音樂由 updateGame 統一控制)
+            clearInterval(slideshowInterval);
+
+            let mediaHtml = '';
+            if (mediaUrl) {
+                const isVideo = mediaUrl.toLowerCase().endsWith('.mp4') || mediaUrl.toLowerCase().endsWith('.mov');
+                
+                if (isVideo) {
+                    // 影片載入失敗時的錯誤提示 (新增 Console 偵錯)
+                    mediaHtml = `<video src="${mediaUrl}" controls loop autoplay muted class="gift-media mb-4 mx-auto" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFFBEB/D97706?text=影片載入失敗%0A請檢查檔案名稱'; console.error('【偵錯】影片載入失敗，嘗試的網址是: ' + this.src);" 
+                        alt="驚喜影片"></video>`;
+                } else {
+                    // 圖片載入失敗時的錯誤提示 (新增 Console 偵錯)
+                    mediaHtml = `<img src="${mediaUrl}" class="gift-media mx-auto" alt="內容圖片" 
+                        onerror="this.onerror=null; this.src='https://placehold.co/400x300/FFFBEB/D97706?text=圖片載入失敗%0A請檢查檔案名稱'; console.error('【偵錯】圖片載入失敗，嘗試的網址是: ' + this.src);">`;
+                }
+            }
+
+            contentDisplay.innerHTML = `
+                <div class="w-full p-4 md:p-6 ${stateClass} rounded-2xl shadow-xl transition-all duration-500 transform scale-100">
+                    <p class="text-3xl md:text-4xl font-black mb-4 block text-cute-shadow">${title}</p>
+                    ${mediaHtml}
+                    <!-- bodyHtml 內容包含禮物名稱時，會將粗體加大樣式放在 bodyHtml 傳入的 P 標籤上 -->
+                    <div class="leading-relaxed whitespace-pre-wrap">${bodyHtml}</div>
+                </div>
+            `;
+            giftBoxVisual.classList.add('hidden-item');
+            actionArea.innerHTML = '';
+            // 清空臨時訊息，讓位給 quiz-form 內的 feedback-message
+            // 但保留音樂播放提示
+            if (message.onclick === null) {
+                 message.textContent = ''; 
+            }
+            loadingSpinner.classList.add('hidden-item');
+        }
+
+        /**
+         * 顯示問答畫面
+         */
+        function showQuiz(question) {
+            const inputType = question.type === 'multi' ? 'checkbox' : 'radio';
+            let optionsHtml = '';
+            
+            question.options.forEach((option, index) => {
+                optionsHtml += `
+                    <label class="quiz-option text-left text-gray-700">
+                        <input type="${inputType}" name="quiz-option" value="${index}" class="form-${inputType} text-amber-500">
+                        <span class="text-lg font-medium">${option.text}</span>
+                    </label>
+                `;
+            });
+
+            showContentCard(question.title, `
+                <form id="quiz-form" class="mt-4 w-full">
+                    ${optionsHtml}
+                    <div id="quiz-feedback" class="hidden-item"></div>
+                </form>
+            `, null, 'bg-amber-100/80'); // 背景改為淺琥珀色
+
+            // 添加提交按鈕
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'piggy-button bg-amber-600 hover:bg-amber-700 text-white shadow-lg mt-4'; // 按鈕改為琥珀色
+            submitBtn.textContent = '確定送出';
+            submitBtn.onclick = () => handleQuizSubmit(question.state);
+            actionArea.appendChild(submitBtn);
+        }
+
+        /**
+         * 顯示問答的即時反饋訊息 (不會跳轉狀態)
+         */
+        function showFeedbackMessage(text) {
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            if (feedbackDiv) {
+                feedbackDiv.innerHTML = `<p>${text}</p>`;
+                feedbackDiv.classList.remove('hidden-item');
+                feedbackDiv.classList.add('feedback-message');
+                
+                // 1.5 秒後隱藏反饋
+                setTimeout(() => {
+                    feedbackDiv.classList.add('hidden-item');
+                    feedbackDiv.classList.remove('feedback-message');
+                    feedbackDiv.innerHTML = '';
+                }, 1500);
+            }
+        }
+
+
+        /**
+         * 處理問答提交
+         */
+        function handleQuizSubmit(questionState) {
+            const questionIndex = questionState - 1;
+            const question = questions[questionIndex];
+            const form = document.getElementById('quiz-form');
+            const selectedOptions = Array.from(form.querySelectorAll(`input[name="quiz-option"]:checked`));
+            
+            // 檢查是否選取
+            if (selectedOptions.length === 0) {
+                message.textContent = '請選擇至少一個選項！';
+                return;
+            }
+            // 清空臨時訊息 (但保留音樂播放提示)
+            if (message.onclick === null) {
+                 message.textContent = ''; 
+            }
+
+            if (question.type === 'single') {
+                const selectedIndex = parseInt(selectedOptions[0].value);
+                const selectedOption = question.options[selectedIndex];
+
+                if (selectedOption.isCorrect) {
+                    updateGame(question.successState);
+                } else {
+                    // 顯示即時反饋
+                    showFeedbackMessage(selectedOption.feedback || '答錯了！請再試一次。');
+                    // 停留在當前狀態
+                }
+            } else if (question.type === 'multi') {
+                // 檢查是否所有選項都被選中
+                const allOptionsCount = question.options.length;
+                const allCorrectlySelected = selectedOptions.length === allOptionsCount;
+                
+                if (allCorrectlySelected) {
+                    updateGame(question.successState);
+                } else {
+                    showFeedbackMessage(question.failureFeedback || '請確保所有正確答案都已被選取。');
+                    // 停留在當前狀態
+                }
+            } else if (question.type === 'branching') {
+                // 處理 Q9 和 Q10 的特殊邏輯
+                const selectedIndex = parseInt(selectedOptions[0].value);
+                const selectedOption = question.options[selectedIndex];
+
+                if (selectedOption.isCorrect) {
+                    updateGame(question.successState);
+                } else if (selectedOption.failureState) {
+                    // 跳轉到確認畫面
+                    updateGame(selectedOption.failureState);
+                } else {
+                    // 即時反饋 (如 Q9 選 IU)
+                    showFeedbackMessage(selectedOption.feedback || '請再想一想。');
+                    // 停留在當前狀態
+                }
+            }
+        }
+
+        /**
+         * 處理確認畫面 (Q9/Q10 失敗路徑) 的按鈕點擊
+         * @param {number} optionIndex 點擊的選項索引 (0: 我愛, 1: 我不愛)
+         * @param {number} backToQState 點擊「對我不愛」時要跳回的題目狀態 (Q9或Q10)
+         * @param {number} successState 點擊「騙你的 我愛」時要跳往的題目狀態 (Q10)
+         */
+        function handleConfirmationSubmit(optionIndex, backToQState, successState) {
+            if (optionIndex === 0) {
+                // 選項一: 騙你的 我愛小豬拉 (跳到下一題)
+                updateGame(successState);
+            } else if (optionIndex === 1) {
+                // 選項二: 對我不愛小豬 (警告並跳回 Q9/Q10)
+                message.textContent = '⚠️ 警告窗口：我再給你一次機會！請真心回答。';
+                
+                // 模擬警告延遲後跳轉
+                setTimeout(() => {
+                    updateGame(backToQState);
+                }, 1500); 
+            }
+        }
+
+        /**
+         * 顯示禮物盒，準備點擊 (State 14)
+         */
+        function showGiftBoxPrep() {
+            contentDisplay.innerHTML = '';
+            // 確保禮物盒重設並可見
+            giftBoxVisual.classList.remove('hidden-item');
+            // 【路徑修正：使用正確的 assets-gift 資料夾路徑】
+            giftBoxVisual.src = "./assets-gift/gift1.jpg"; 
+            giftBoxVisual.style.animation = 'none';
+            giftBoxVisual.style.transform = 'scale(1) rotate(0deg)';
+            giftBoxVisual.style.opacity = '1';
+            void giftBoxVisual.offsetWidth; 
+
+            actionArea.innerHTML = '';
+            message.textContent = '彈跳出一個禮物盒，點擊它來開箱！';
+        }
+
+        /**
+         * 處理最終禮物盒被點擊後，觸發強光動畫並進入最終禮物狀態 (State 21)
+         */
+        function triggerFinalGlowAnimation() {
+            actionArea.innerHTML = '';
+            contentDisplay.innerHTML = '';
+            message.textContent = '⚡️ 終極大獎發出強光！即將揭曉... ⚡️';
+            
+            // 確保 giftBoxVisual 完全重置並顯示
+            giftBoxVisual.classList.remove('hidden-item');
+            // 【路徑修正：使用正確的 assets-gift 資料夾路徑】
+            giftBoxVisual.src = "./assets-gift/gift1.jpg"; 
+            giftBoxVisual.style.animation = 'none';
+            giftBoxVisual.style.transform = 'scale(1) rotate(0deg)';
+            giftBoxVisual.style.opacity = '1';
+            void giftBoxVisual.offsetWidth; 
+
+            // 1. 讓整個容器發出強光 (5秒)
+            const container = document.getElementById('game-container');
+            container.style.animation = 'strongGlow 5s ease-in-out forwards';
+            
+            // 禮物盒發光後消失 (模擬打開)
+            giftBoxVisual.style.animation = 'openAndGlow 0.5s forwards'; 
+
+            loadingSpinner.classList.remove('hidden-item');
+            
+            setTimeout(() => {
+                // 5秒後：強光結束，移除動畫，進入 2秒空白
+                container.style.animation = 'none'; // 移除強光
+                contentDisplay.innerHTML = ''; // 清空內容
+                loadingSpinner.classList.add('hidden-item'); 
+                // *** 變更訊息內容 ***
+                message.textContent = '最大獎是.......!!'; 
+                
+                // 2. 2秒空白延遲
+                setTimeout(() => {
+                    message.textContent = ''; // 清空倒數訊息
+                    updateGame(STATE.GIFT_FINAL); // 進入最終禮物狀態 (State 21)
+                }, 2000);
+                
+            }, 5000); // 等待 5 秒強光動畫結束
+        }
+
+        /**
+         * 處理禮物盒點擊事件
+         */
+        function handleGiftClick() {
+            if (gameState !== STATE.GIFT_PREP) return;
+
+            // 檢查是否為最終禮物 (索引 6)
+            if (currentGiftIndex === 6) {
+                triggerFinalGlowAnimation();
+                return;
+            }
+
+            message.textContent = '禮物正在打開中...';
+            giftBoxVisual.style.cursor = 'default';
+            
+            // 1. 彈跳兩下 (jiggle)
+            giftBoxVisual.style.animation = 'jiggle 0.5s ease-in-out 2';
+
+            setTimeout(() => {
+                // 2. 打開發光 (open and glow)
+                giftBoxVisual.style.animation = 'openAndGlow 0.8s forwards';
+
+                setTimeout(() => {
+                    // 3. 進入當前禮物狀態 (根據 currentGiftIndex)
+                    const targetGift = giftSequence[currentGiftIndex];
+                    if (!targetGift) {
+                         message.textContent = '遊戲結束！';
+                         return;
+                    }
+                    
+                    if (targetGift.isExplosion) {
+                         // 爆炸是特殊狀態，進入 STATE.GIFT_EXPLOSION (20)
+                         updateGame(STATE.GIFT_EXPLOSION);
+                    } else {
+                        // 一般禮物狀態 (15, 16, 17, 18, 19)
+                        updateGame(STATE.GIFT_REVEAL_START + currentGiftIndex); 
+                    }
+                    giftBoxVisual.style.cursor = 'pointer';
+                }, 800);
+            }, 1000); 
+        }
+
+        /**
+         * 處理開箱後的下一步按鈕 (放/再開一個禮物盒)
+         */
+        function handleNextGiftStep(nextState) {
+             // 只有在 Gift 狀態 (15-21) 才能使用
+            if (gameState >= STATE.GIFT_REVEAL_START && gameState <= STATE.GIFT_FINAL) {
+                
+                if (nextState === STATE.GIFT_PREP) {
+                    currentGiftIndex++; // 移動到下一個禮物
+                    // 繼續開箱: 回到禮物盒等待點擊狀態 (State 14)
+                    updateGame(STATE.GIFT_PREP); 
+                } else if (nextState === STATE.CARD) {
+                    // 最終卡片
+                    updateGame(STATE.CARD);
+                }
+            }
+        }
+
+        /**
+         * 播放卡片文字逐字效果 (已移除標題)
+         */
+        function typeText(text) {
+            // 移除標題，並調整容器對齊方式為左上角
+            contentDisplay.innerHTML = `
+                <div class="w-full p-6 bg-amber-50/90 rounded-2xl shadow-xl border-4 border-amber-300 transition-all duration-500 transform scale-100 min-h-[300px] flex flex-col items-start text-left">
+                    <p class="text-3xl font-black mb-4 block text-cute-shadow text-center w-full">小豬的真心話</p>
+                    <pre id="typewriter" class="typewriter-text text-xl font-extrabold text-amber-700 leading-relaxed max-w-full overflow-hidden w-full pt-2"></pre>
+                </div>
+            `;
+            const typewriter = document.getElementById('typewriter');
+            let i = 0;
+            const speed = 75; // 每個字 75ms (放慢速度)
+
+            function type() {
+                if (i < text.length) {
+                    // 處理換行，pre 標籤會保持格式
+                    typewriter.textContent += text.charAt(i); 
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    typewriter.style.borderRight = 'none';
+                    message.textContent = '卡片讀取完畢... 還有最後一個驚喜！';
+                    message.classList.remove('text-red-500');
+                    message.classList.add('text-amber-600', 'text-2xl');
+
+                    // 新增按鈕：跳轉到照片輪播
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'piggy-button bg-pink-500 hover:bg-pink-600 text-white shadow-lg mt-4';
+                    nextBtn.textContent = '進入最後的驚喜 (輪播)';
+                    nextBtn.onclick = () => updateGame(STATE.PHOTO_SLIDESHOW);
+                    actionArea.appendChild(nextBtn);
+                }
+            }
+            type();
+        }
+
+        /**
+         * 顯示並啟動照片輪播
+         */
+        function showSlideshow() {
+            slideshowIndex = 0; // 從第一張開始
+            
+            showContentCard(
+                "專屬回憶錄 💖",
+                `<div id="slideshow-container" class="relative w-full flex justify-center items-center min-h-[300px]">
+                    <img id="current-photo" src="" alt="合照" class="slideshow-img active">
+                </div>`,
+                null,
+                'bg-pink-100/90' // 輪播畫面使用粉色系
+            );
+            
+            // 這裡不再播放音樂，因為音樂在進入前已停止 (滿足使用者需求)
+            // 圖片已設置載入錯誤處理
+
+            // 顯示第一張照片
+            updateSlideshowImage();
+
+            // 啟動自動輪播 (每 3 秒換一張)
+            slideshowInterval = setInterval(() => {
+                slideshowIndex = (slideshowIndex + 1) % slideshowPhotos.length;
+                updateSlideshowImage();
+            }, 3000);
+
+            // 設置手動控制按鈕
+            actionArea.innerHTML = `
+                <div class="flex space-x-4">
+                    <button class="piggy-button bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg" onclick="manualSlideshow(-1)">
+                        上一張
+                    </button>
+                    <button class="piggy-button bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg" onclick="manualSlideshow(1)">
+                        下一張
+                    </button>
+                </div>
+            `;
+
+             // 設置照片編號提示
+            const slideshowContainer = document.getElementById('slideshow-container');
+            const counter = document.createElement('p');
+            counter.id = 'photo-counter';
+            counter.className = 'mt-4 text-gray-600 font-bold';
+            slideshowContainer.insertAdjacentElement('afterend', counter);
+        }
+        
+        /**
+         * 更新輪播圖片和編號
+         */
+        function updateSlideshowImage() {
+            const imgElement = document.getElementById('current-photo');
+            const counterElement = document.getElementById('photo-counter');
+            
+            if (imgElement && slideshowPhotos.length > 0) {
+                 // 設置淡出動畫
+                imgElement.classList.remove('active');
+
+                setTimeout(() => {
+                    // 設置新圖片和淡入動畫
+                    imgElement.src = slideshowPhotos[slideshowIndex];
+                    // 圖片載入錯誤處理 (確保圖片路徑正確)
+                    imgElement.onerror = function() {
+                        this.src = "https://placehold.co/600x400/FF0000/FFFFFF?text=照片載入失敗";
+                    }
+                    imgElement.classList.add('active');
+                    
+                    if (counterElement) {
+                        counterElement.textContent = `第 ${slideshowIndex + 1} / ${slideshowPhotos.length} 張`;
+                    }
+                }, 500); // 等待 500ms 淡出
+            }
+        }
+
+        /**
+         * 手動切換照片
+         */
+        function manualSlideshow(direction) {
+            // 清除自動輪播，避免干擾
+            clearInterval(slideshowInterval); 
+
+            slideshowIndex = (slideshowIndex + direction + slideshowPhotos.length) % slideshowPhotos.length;
+            updateSlideshowImage();
+            
+            // 重新啟動自動輪播
+            slideshowInterval = setInterval(() => {
+                slideshowIndex = (slideshowIndex + 1) % slideshowPhotos.length;
+                updateSlideshowImage();
+            }, 3000);
+        }
+
+        // === 遊戲邏輯控制中心 ===
+
+        /**
+         * 更新遊戲畫面和狀態
+         * @param {number} newState 目標狀態
+         */
+        function updateGame(newState) {
+            gameState = newState;
+            actionArea.innerHTML = '';
+            
+            // 檢查是否應該播放音樂 (從開始到卡片結束)
+            if (newState <= STATE.CARD) {
+                playMusic();
+            } else if (newState === STATE.PHOTO_SLIDESHOW) {
+                // 進入輪播前，停止背景音樂
+                stopMusic();
+            }
+            
+            // 清除一般訊息 (但保留音樂播放提示)
+            if (message.onclick === null) {
+                 message.textContent = ''; 
+            }
+
+            switch (gameState) {
+                // --- 測驗階段 (保持不變) ---
+                case STATE.INTRO:
+                    // 初始介紹
+                    const introHtml = `
+                        <p class="text-4xl font-black mb-2 text-cute-shadow">歡迎來到2025</p>
+                        <p class="text-3xl font-bold mb-4 text-cute-shadow">豬豬會社年末有獎徵答</p>
+                        <p class="text-xl font-medium text-blue-600 font-extrabold">答對全部就可以獲得精美大獎喔！</p>
+                    `;
+
+                    showContentCard(
+                        "", // 標題留空
+                        introHtml, // 使用 HTML 結構
+                        null,
+                        'bg-amber-100/80' // 背景改為淺琥珀色
+                    );
+                    const startBtn = document.createElement('button');
+                    startBtn.className = 'piggy-button bg-amber-600 hover:bg-amber-700 text-white shadow-lg'; // 按鈕改為琥珀色
+                    startBtn.textContent = '開始答題';
+                    startBtn.onclick = () => updateGame(STATE.QUIZ_START);
+                    actionArea.appendChild(startBtn);
+                    break;
+                
+                // Q1 到 Q10 的通用處理
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                    showQuiz(questions[gameState - 1]);
+                    break;
+
+                // Q9/Q10 失敗確認畫面
+                case STATE.CONFIRM_Q9:
+                    showContentCard(
+                        "你真的不愛小豬嗎?",
+                        "請確認你的心意。",
+                        null,
+                        'bg-red-100/80' 
+                    );
+                    const btn11_1 = document.createElement('button');
+                    btn11_1.className = 'piggy-button bg-green-500 hover:bg-green-600 text-white shadow-lg mr-4';
+                    btn11_1.textContent = '騙你的 我愛小豬拉';
+                    btn11_1.onclick = () => handleConfirmationSubmit(0, STATE.QUIZ_START + 8, STATE.QUIZ_END); 
+                    actionArea.appendChild(btn11_1);
+
+                    const btn11_2 = document.createElement('button');
+                    btn11_2.className = 'piggy-button bg-orange-800 hover:bg-orange-900 text-white shadow-lg'; 
+                    btn11_2.textContent = '對我不愛小豬';
+                    btn11_2.onclick = () => handleConfirmationSubmit(1, STATE.QUIZ_START + 8, STATE.QUIZ_END); 
+                    actionArea.appendChild(btn11_2);
+                    break;
+
+                case STATE.CONFIRM_Q10:
+                    showContentCard(
+                        "所以你不愛小豬嗎?",
+                        "這是最後的機會，好好想想！",
+                        null,
+                        'bg-red-100/80' 
+                    );
+                    const btn12_1 = document.createElement('button');
+                    btn12_1.className = 'piggy-button bg-green-500 hover:bg-green-600 text-white shadow-lg mr-4';
+                    btn12_1.textContent = '騙你的 我愛小豬拉';
+                    btn12_1.onclick = () => handleConfirmationSubmit(0, STATE.QUIZ_END, STATE.QUIZ_END); 
+                    actionArea.appendChild(btn12_1);
+
+                    const btn12_2 = document.createElement('button');
+                    btn12_2.className = 'piggy-button bg-orange-800 hover:bg-orange-900 text-white shadow-lg'; 
+                    btn12_2.textContent = '對我不愛小豬';
+                    btn12_2.onclick = () => handleConfirmationSubmit(1, STATE.QUIZ_END, STATE.QUIZ_END); 
+                    actionArea.appendChild(btn12_2);
+                    break;
+                
+                // --- 恭喜/進入開箱 (保持不變) ---
+                case STATE.CONGRATS:
+                    // ... (保持不變) ...
+                    contentDisplay.innerHTML = `
+                        <p class="text-4xl font-black text-amber-700 text-cute-shadow mb-4 animate-bounce">🎉 恭喜你獲得大豬專屬 2025 生日禮物! 🎉</p> 
+                        <div id="intro-text" class="text-xl font-medium text-gray-700 leading-loose min-h-[100px] text-center"></div>
+                    `;
+                    
+                    const lines = [
+                        "因為這一年來你對小豬的照顧陪伴，",
+                        "讓豬豬公司營運到現在",
+                        "特別為你頒發特別獎項",
+                        "那就讓我們不要廢話那麼多...",
+                        "開始開獎吧~"
+                    ];
+                    let lineIndex = 0;
+                    
+                    function displayNextLine() {
+                        if (lineIndex < lines.length) {
+                            const p = document.createElement('p');
+                            p.textContent = lines[lineIndex];
+                            p.classList.add('opacity-0', 'transition-opacity', 'duration-1000', 'text-2xl', 'font-semibold');
+                            document.getElementById('intro-text').appendChild(p);
+                            setTimeout(() => { p.classList.remove('opacity-0'); }, 10); 
+                            lineIndex++;
+                            setTimeout(displayNextLine, 1500); 
+                        } else {
+                            setTimeout(() => {
+                                const nextBtn = document.createElement('button');
+                                nextBtn.className = 'piggy-button bg-amber-600 hover:bg-amber-700 text-white shadow-lg mt-8'; 
+                                nextBtn.textContent = '準備好了！';
+                                nextBtn.onclick = () => updateGame(STATE.GIFT_PREP);
+                                actionArea.appendChild(nextBtn);
+                            }, 1000);
+                        }
+                    }
+                    displayNextLine();
+                    break;
+
+                // --- 開箱階段 (保持不變) ---
+                case STATE.GIFT_PREP:
+                    showGiftBoxPrep();
+                    break;
+
+                case 15: 
+                case 16: 
+                case 17: 
+                case 18: 
+                case 19: { 
+                    const giftData = giftSequence[gameState - STATE.GIFT_REVEAL_START]; 
+                    
+                    const formattedGiftText = `<p class="text-2xl md:text-3xl font-extrabold text-cute-shadow whitespace-pre-wrap">${giftData.text}</p>`;
+
+                    showContentCard(
+                        giftData.title,
+                        formattedGiftText, 
+                        giftData.img,
+                        'bg-amber-100/80' 
+                    );
+                    
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'piggy-button bg-amber-600 hover:bg-amber-700 text-white shadow-lg mt-4'; 
+                    nextBtn.textContent = giftData.nextBtnText;
+                    nextBtn.onclick = () => handleNextGiftStep(giftData.nextState); 
+                    actionArea.appendChild(nextBtn);
+                    break;
+                }
+                
+                case STATE.GIFT_EXPLOSION: {
+                    const giftData = giftSequence.find(g => g.isExplosion); 
+                    message.textContent = '💥 爆炸! 💥';
+                    
+                    giftBoxVisual.style.animation = 'explosion 0.5s forwards';
+                    giftBoxVisual.classList.add('hidden-item'); 
+
+                    showContentCard(
+                        giftData.title,
+                        giftData.text, 
+                        giftData.img,
+                        'bg-red-100/80'
+                    );
+
+                    setTimeout(() => {
+                        const retryBtn = document.createElement('button');
+                        retryBtn.className = 'piggy-button bg-amber-600 hover:bg-amber-700 text-white shadow-lg mt-4'; 
+                        retryBtn.textContent = giftData.nextBtnText;
+                        
+                        retryBtn.onclick = () => {
+                            currentGiftIndex = 6; 
+                            updateGame(STATE.GIFT_PREP);
+                        }; 
+                        actionArea.appendChild(retryBtn);
+                        
+                        giftBoxVisual.style.animation = 'none';
+                        giftBoxVisual.style.opacity = '1';
+                        giftBoxVisual.style.transform = 'scale(1) rotate(0deg)'; 
+
+                    }, 500); 
+                    break;
+                }
+                
+                case STATE.GIFT_FINAL: {
+                    loadingSpinner.classList.add('hidden-item');
+                    const finalGift = giftSequence[6]; 
+                    
+                    const formattedFinalText = `<p class="text-2xl md:text-3xl font-extrabold text-cute-shadow whitespace-pre-wrap">${finalGift.text}</p>`;
+                    
+                    showContentCard(
+                        finalGift.title,
+                        formattedFinalText, 
+                        finalGift.img,
+                        'bg-amber-100/90 border-4 border-amber-400' 
+                    );
+
+                    const finalBtn = document.createElement('button');
+                    finalBtn.className = 'piggy-button bg-amber-400 hover:bg-amber-500 text-indigo-900 shadow-lg animate-pulse mt-4'; 
+                    finalBtn.textContent = finalGift.nextBtnText;
+                    finalBtn.onclick = () => handleNextGiftStep(finalGift.nextState); 
+                    actionArea.appendChild(finalBtn);
+                    break;
+                }
+                
+                // --- 最終卡片 ---
+                case STATE.CARD:
+                    // 卡片逐字播放
+                    typeText(cardText);
+                    break;
+
+                // --- 照片輪播 ---
+                case STATE.PHOTO_SLIDESHOW:
+                    // 音樂已在 updateGame 函數開始時停止
+                    showSlideshow();
+                    break;
+
+                default:
+                    showContentCard('遊戲狀態錯誤，請重新整理。', '請從頭開始。', null, 'bg-red-100/80');
+                    break;
+            }
+        }
+        
+        // 頁面載入時啟動遊戲，並嘗試播放音樂
+        window.onload = () => updateGame(STATE.INTRO);
+        
+    </script>
+</body>
+</html>
